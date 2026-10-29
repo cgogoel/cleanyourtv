@@ -43,14 +43,20 @@ SESSIONS = (
 
 def instant(block):
     """"2026-10-23" + "17:30:00Z" as one UTC timestamp; None when the time is not published yet."""
+    if not isinstance(block, dict):
+        raise TypeError("a session is not an object")
     if not block.get("date") or not block.get("time"):
         return None
+    if not isinstance(block["date"], str) or not isinstance(block["time"], str):
+        raise ValueError("session date and time must be strings")
     return f"{block['date']}T{block['time']}" if block["time"].endswith("Z") else f"{block['date']}T{block['time']}Z"
 
 
 def calendar(races, now):
     out = []
     for race in races:
+        if not isinstance(race, dict):
+            raise TypeError("Races contains a race that is not an object")
         sessions = []
         for key, name in SESSIONS:
             if key in race and (start := instant(race[key])):
@@ -62,10 +68,26 @@ def calendar(races, now):
         # The launcher keeps a weekend on screen for four hours after the start; a day covers that.
         if datetime.datetime.fromisoformat(start.replace("Z", "+00:00")) < now - datetime.timedelta(days=1):
             continue
+        try:
+            number = int(race["round"])
+        except (TypeError, ValueError, OverflowError):
+            raise TypeError("race round is not a number") from None
+        name = race["raceName"]
+        if not isinstance(name, str):
+            raise TypeError("raceName is not a string")
+        circuit = race.get("Circuit", {})
+        if not isinstance(circuit, dict):
+            raise TypeError("Circuit is not an object")
+        location = circuit.get("Location", {})
+        if not isinstance(location, dict):
+            raise TypeError("Circuit.Location is not an object")
+        place = location.get("locality", "")
+        if not isinstance(place, str):
+            raise TypeError("Circuit.Location.locality is not a string")
         out.append({
-            "round": int(race["round"]),
-            "name": race["raceName"],
-            "place": race.get("Circuit", {}).get("Location", {}).get("locality", ""),
+            "round": number,
+            "name": name,
+            "place": place,
             "sessions": sessions,
         })
     return out
@@ -163,16 +185,32 @@ def main():
     now = datetime.datetime.now(datetime.timezone.utc)
     try:
         table = payload["MRData"]["RaceTable"]
-        races = calendar(table["Races"], now)
+        if not isinstance(table, dict):
+            raise TypeError("RaceTable is not an object")
     except (KeyError, TypeError):
-        return refuse(f"the answer for the {args.season} season has no MRData.RaceTable in it. Nothing "
+        return refuse(f"Jolpica's answer for the {args.season} season has no MRData.RaceTable in it. Nothing "
                       f"was written: run it again, or pass --season with a year.")
+    # Resolve the response's year before writing: even the success message needs it.
+    response_season = table.get("season")
+    if type(response_season) is int:
+        response_season = str(response_season)
+    if (not isinstance(response_season, str) or len(response_season) != 4
+            or not response_season.isdecimal() or int(response_season) < FIRST_SEASON):
+        return refuse("Jolpica's RaceTable.season is missing or is not a championship year. Nothing "
+                      "was written: run it again, or pass --season with a year.")
+    try:
+        if not isinstance(table.get("Races"), list):
+            raise TypeError("RaceTable.Races is not an array")
+        races = calendar(table["Races"], now)
+    except (KeyError, TypeError) as e:
+        return refuse(f"Jolpica's {response_season} calendar has invalid race data ({e}). Nothing was "
+                      f"written: run it again when the API serves a complete calendar.")
     except ValueError as e:
-        return refuse(f"a session time in the {args.season} calendar is not a timestamp this script "
+        return refuse(f"a session time in the {response_season} calendar is not a timestamp this script "
                       f"understands ({e}). Nothing was written: the API has changed how it writes a "
                       f"session's time.")
     if not races:
-        sys.stderr.write(f"no upcoming races in the {table['season']} calendar; try --season with next "
+        sys.stderr.write(f"no upcoming races in the {response_season} calendar; try --season with next "
                          f"year\n")
         return 1
     theme["race_calendar"] = races
@@ -184,11 +222,11 @@ def main():
     try:
         config.write_text(text, encoding="utf-8")
     except OSError as e:
-        return refuse(f"could not write {config} ({e.strerror or e}). The {table['season']} calendar was "
+        return refuse(f"could not write {config} ({e.strerror or e}). The {response_season} calendar was "
                       f"fetched but is not in the theme: check the folder's permissions, or move what is "
                       f"at that path aside, and run it again.")
     first = races[0]
-    print(f"{len(races)} races from the {table['season']} season -> {config}")
+    print(f"{len(races)} races from the {response_season} season -> {config}")
     print(f"next: round {first['round']} {first['name']}, race {first['sessions'][-1]['start']}")
     return 0
 

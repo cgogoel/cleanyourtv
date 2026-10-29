@@ -422,7 +422,7 @@ def write_list(path, result, include_low):
               "`dumpsys package <name>`.")
     print(f"apply:   TV_HOST={os.environ.get('TV_HOST', '<tv ip>')} tools/disable.sh {path}")
     print(f"undo:    TV_HOST={os.environ.get('TV_HOST', '<tv ip>')} tools/restore.sh {path}")
-    print(f"read it first: the comments say what each one takes with it.")
+    print("read it first: the comments say what each one takes with it.")
 
 
 def main():
