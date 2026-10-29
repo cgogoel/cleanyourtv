@@ -1,4 +1,4 @@
-package com.gathin.artframe;
+package com.cgogoel.artframe;
 
 import org.json.JSONException;
 import org.json.JSONObject;

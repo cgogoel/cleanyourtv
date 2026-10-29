@@ -12,11 +12,11 @@ def unsplashKey = (System.getenv('UNSPLASH_ACCESS_KEY') ?: secrets.getProperty('
 if (!(unsplashKey ==~ /[A-Za-z0-9_-]*/)) throw new GradleException('unsplash.access_key has unexpected characters')
 
 android {
-    namespace 'com.gathin.artframe'
+    namespace 'com.cgogoel.artframe'
     compileSdk 34
 
     defaultConfig {
-        applicationId 'com.gathin.artframe'
+        applicationId 'com.cgogoel.artframe'
         minSdk 26
         targetSdk 34
         versionCode 1

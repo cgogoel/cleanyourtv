@@ -25,7 +25,7 @@
         android:supportsRtl="true"
         android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
 
-        <!-- Art mode: the tile, the card and the remote's art button (app_keys "4181:com.gathin.artframe"). -->
+        <!-- Art mode: the tile, the card and the remote's art button (app_keys "4181:com.cgogoel.artframe"). -->
         <activity
             android:name=".FrameActivity"
             android:exported="true"
@@ -54,7 +54,7 @@
             android:exported="true"
             android:label="@string/settings" />
 
-        <!-- `settings put secure screensaver_components com.gathin.artframe/.ArtDream` (build-and-install.sh). -->
+        <!-- `settings put secure screensaver_components com.cgogoel.artframe/.ArtDream` (build-and-install.sh). -->
         <service
             android:name=".ArtDream"
             android:label="@string/dream_name"

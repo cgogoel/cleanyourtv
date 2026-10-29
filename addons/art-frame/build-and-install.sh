@@ -6,7 +6,7 @@
 #        TV_HOST=192.168.1.50 addons/art-frame/build-and-install.sh --uninstall
 #
 # For the remote's art button on a TCL frame TV (A300W / NXTFRAME), add to your theme's config.json app_keys:
-#   "4181:com.gathin.artframe"
+#   "4181:com.cgogoel.artframe"
 # and disable com.tcl.exhibit, which otherwise takes that button. See README.md.
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
@@ -16,7 +16,7 @@ PY="$TOOLS/venv/bin/python"
 [ -x "$PY" ] || PY="$TOOLS/venv/Scripts/python.exe"
 [ -x "$PY" ] || { echo "run: python3 -m venv tools/venv && tools/venv/bin/pip install -r tools/requirements.txt" >&2; exit 1; }
 export MSYS_NO_PATHCONV=1
-PKG=com.gathin.artframe
+PKG=com.cgogoel.artframe
 DREAM="$PKG/.ArtDream"
 SAVED="$HERE/.screensaver-before"
 tv() { "$PY" -I "$TOOLS/tv.py" "$@"; }

@@ -1,4 +1,4 @@
-package com.gathin.artframe;
+package com.cgogoel.artframe;
 
 import android.app.WallpaperManager;
 import android.content.Context;

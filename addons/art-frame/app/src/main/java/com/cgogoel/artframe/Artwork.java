@@ -1,4 +1,4 @@
-package com.gathin.artframe;
+package com.cgogoel.artframe;
 
 import org.json.JSONArray;
 import org.json.JSONException;

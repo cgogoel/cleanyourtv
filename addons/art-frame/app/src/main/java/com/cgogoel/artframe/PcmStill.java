@@ -1,4 +1,4 @@
-package com.gathin.artframe;
+package com.cgogoel.artframe;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;

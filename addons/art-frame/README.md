@@ -7,6 +7,10 @@ backend, and it runs on any Android TV 8 or newer.
 
 ![Art Frame's library on a TCL 65A300W](screenshot.jpg)
 
+This lives in the `art-frame` branch of [cgogoel/cleanyourtv](https://github.com/cgogoel/cleanyourtv/tree/art-frame),
+a fork of [cleanyourtv](https://github.com/Gathin23/cleanyourtv), not in cleanyourtv itself. The fork's launcher also
+has the `system_wallpaper` switch that puts the art behind Home.
+
 ## What it does
 
 - **Art mode.** The tile, the card and (when mapped) the remote's art button open the default art full screen. Left
@@ -35,7 +39,7 @@ backend, and it runs on any Android TV 8 or newer.
 - **Look options.** Title and artist, slow zoom, crossfade, clock: each on or off.
 - **Schedules.** Art hours (black, or let the TV sleep, outside them) and night dimming.
 - **Home background.** "Home background matches the art" sets the TV's system wallpaper to the default piece (or the
-  last piece shown). cleanyourtv's launcher shows it behind Home with the theme key `"system_wallpaper": true`
+  last piece shown). This fork's launcher shows it behind Home with the theme key `"system_wallpaper": true`
   (and `"wallpaper_dim"` to darken it, `"ambient_glow": false` so the colour glow does not cover it).
 - **Wake into art** (off by default). On TCL TVs the firmware records which key woke the TV; with "when the art button
   wakes the TV", waking with the art button opens art mode, as TCL's own app does, and the power button wakes to Home.
@@ -63,7 +67,7 @@ Disabled, exhibit leaves the key to the launcher, so:
 
 1. Disable TCL's art app: `pm disable-user --user 0 com.tcl.exhibit` (in a list for `tools/disable.sh`, so
    `tools/restore.sh` can undo it). Its art collection, AI art and art picture mode go with it.
-2. Add `"4181:com.gathin.artframe"` to `app_keys` in your theme and push it with `tools/theme.sh`, with the launcher
+2. Add `"4181:com.cgogoel.artframe"` to `app_keys` in your theme and push it with `tools/theme.sh`, with the launcher
    installed with `INPUT_KEY_SERVICE=1`.
 3. Optionally turn on Settings > Wake into art.
 
