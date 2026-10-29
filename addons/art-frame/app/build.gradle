@@ -16,7 +16,9 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId 'com.cgogoel.artframe'
+        // -PartframeAppId=<package> builds under another package name, such as an earlier install's, so it can
+        // be updated in place to export its library (see TransferReceiver).
+        applicationId(project.findProperty('artframeAppId') ?: 'com.cgogoel.artframe')
         minSdk 26
         targetSdk 34
         versionCode 1
